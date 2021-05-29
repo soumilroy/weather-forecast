@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 
+// env read import.meta.env.SNOWPACK_PUBLIC_API_URL
+// const {SNOWPACK_PUBLIC_API_URL} = import.meta.env;
+// fetch(`${SNOWPACK_PUBLIC_API_URL}/users`).then(...)
+
 function App() {
   const [count, setCount] = useState(0);
 

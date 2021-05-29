@@ -7,7 +7,8 @@ export default {
   plugins: [
     '@snowpack/plugin-react-refresh', 
     '@snowpack/plugin-dotenv', 
-    '@snowpack/plugin-postcss'
+    '@snowpack/plugin-postcss',
+    '@snowpack/plugin-dotenv'
   ],
   routes: [
     /* Enable an SPA Fallback in development: */
