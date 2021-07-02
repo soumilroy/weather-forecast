@@ -21,7 +21,7 @@ class WeatherData extends Component {
       ? dropDownClasses
       : `${dropDownClasses} h-0`;
     return (
-      <div className="weather-data shadow overflow-hidden rounded-lg my-6">
+      <div className="weather-data shadow-lg overflow-hidden rounded-lg my-6">
         <header className="bg-gradient-to-b to-gray-600 from-gray-500">
           <div className="flex items-center justify-between">
             <div className="w-7/12 flex justify-between px-4 py-4">

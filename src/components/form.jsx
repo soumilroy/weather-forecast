@@ -40,7 +40,7 @@ class Form extends Component {
             focusable="false"
             data-prefix="fas"
             data-icon="map-marker-alt"
-            class="w-4 h-4 fill-current mr-2 inline-block"
+            className="w-4 h-4 fill-current mr-2 inline-block"
             role="img"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 384 512"

@@ -5,6 +5,7 @@ import WeatherData from './components/weatherData';
 import Popup from './components/popup';
 import Form from './components/form';
 import Storage from './components/storage';
+import EmptyMessage from './components/emptyMessage';
 // env read import.meta.env.SNOWPACK_PUBLIC_API_URL
 // const {SNOWPACK_PUBLIC_API_URL} = import.meta.env;
 // fetch(`${SNOWPACK_PUBLIC_API_URL}/users`).then(...)
@@ -106,13 +107,7 @@ class App extends Storage {
         <Popup open={this.state.openPopup} setPopupStatus={this.setPopupStatus}>
           <Form />
         </Popup>
-        <div className="max-w-6xl mx-auto px-4 py-4">
-          <div className="h-24 flex items-center justify-center border-2 border-dashed border-gray-700 rounded-lg">
-            <p className="text-gray-400 opacity-90">
-              You can save & view weather information upto 3 locations
-            </p>
-          </div>
-        </div>
+        {!weatherDataAvailable && <EmptyMessage />}
       </div>
     );
   }
