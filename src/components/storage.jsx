@@ -1,21 +1,52 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 
 class Storage extends Component {
-  state = { srWeather: null };
+  state = {
+    srWeather: {},
+    openPopup: false,
+    localCacheFound: false,
+  };
 
-  obtainWeatherObjectOnLoad = () => {
-    const weatherObj = JSON.parse(window.localStorage.getItem('srWeather'));
+  checkLocalCache = () => {
+    let weatherData = window.localStorage.getItem('srWeather');
 
-    if (!weatherObj) {
-      console.log(`Weather Object not defined!`);
-    } else {
-      console.log(weatherObj);
+    if (!weatherData) return;
+
+    if (weatherData) {
+      this.setState({ localCacheFound: true });
+      return;
     }
   };
 
-  saveWeatherObjectOnFetch = (weatherData = { someVal: 123 }) => {
+  setWeatherData = () => {
+    const srWeather = JSON.parse(window.localStorage.getItem('srWeather'));
+    this.setState({ srWeather, localCacheFound: false });
+  };
+
+  removeWeatherDataByLocation = (location) => {
+    let weatherData = { ...this.state.srWeather };
+    let { locations } = weatherData;
+
+    let newLocations = locations.filter((loc) => loc.id !== location.id);
+
+    weatherData = {
+      locations: newLocations,
+      lastUpdated: weatherData.lastUpdated,
+    };
+
+    this.setState({ srWeather: weatherData });
+    this.saveWeatherObjectOnLocal(weatherData);
+  };
+
+  saveWeatherObjectOnLocal = (weatherData) => {
     const freshWeatherData = JSON.stringify(weatherData);
+    window.localStorage.removeItem('srWeather');
     window.localStorage.setItem('srWeather', freshWeatherData);
+  };
+
+  clearLocalCache = () => {
+    window.localStorage.removeItem('srWeather');
+    this.setState({ localCacheFound: false });
   };
 
   validateWeatherObject = (weatherData) => {};
