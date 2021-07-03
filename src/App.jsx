@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import Header from './components/header';
-import Controls from './components/controls';
-import WeatherData from './components/weatherData';
-import Popup from './components/popup';
-import Form from './components/form';
-import Storage from './components/storage';
-import EmptyMessage from './components/emptyMessage';
+import React, { Component } from 'react'
+import Header from './components/header'
+import Controls from './components/controls'
+import WeatherData from './components/weatherData'
+import Popup from './components/popup'
+import Form from './components/form'
+import Storage from './components/storage'
+import EmptyMessage from './components/emptyMessage'
 // env read import.meta.env.SNOWPACK_PUBLIC_API_URL
 // const {SNOWPACK_PUBLIC_API_URL} = import.meta.env;
 // fetch(`${SNOWPACK_PUBLIC_API_URL}/users`).then(...)
@@ -68,35 +68,36 @@ import EmptyMessage from './components/emptyMessage';
 //     },
 //   ],
 //   lastUpdated: new Date().toUTCString(),
-// };
+// }
 
-// window.localStorage.setItem('srWeather', JSON.stringify(srWeather));
+// window.localStorage.setItem('srWeather', JSON.stringify(srWeather))
 
 class App extends Storage {
   componentDidMount = () => {
-    this.checkLocalCache();
-  };
+    this.checkLocalCache()
+  }
 
   setPopupStatus = () => {
-    this.setState({ openPopup: !this.state.openPopup });
-  };
+    this.setState({ openPopup: !this.state.openPopup })
+  }
 
-  render() {
-    let weatherDataAvailable = false;
+  render () {
+    let weatherDataAvailable = false
 
-    if (Object.keys(this.state.srWeather).length) weatherDataAvailable = true;
+    if (Object.keys(this.state.srWeather).length) weatherDataAvailable = true
+    else weatherDataAvailable = false
 
     return (
-      <div className="App relative bg-gradient-to-t from-gray-900 via-gray-700 to-gray-800 min-h-screen">
+      <div className='relative min-h-screen App bg-gradient-to-t from-gray-900 via-gray-700 to-gray-800'>
         <Header setPopupStatus={this.setPopupStatus} />
         <Controls
           isLocalCache={this.state.localCacheFound}
           setWeatherData={this.setWeatherData}
           clearLocalCache={this.clearLocalCache}
         />
-        <div className="max-w-6xl mx-auto px-4 py-4">
+        <div className='max-w-6xl px-4 py-4 mx-auto'>
           {weatherDataAvailable &&
-            this.state.srWeather.locations.map((location) => (
+            this.state.srWeather.locations.map(location => (
               <WeatherData
                 location={location}
                 key={location.id}
@@ -109,8 +110,8 @@ class App extends Storage {
         </Popup>
         {!weatherDataAvailable && <EmptyMessage />}
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App

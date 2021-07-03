@@ -1,55 +1,59 @@
-import { Component } from 'react';
+import { Component } from 'react'
 
 class Storage extends Component {
   state = {
     srWeather: {},
     openPopup: false,
     localCacheFound: false,
-  };
+  }
 
   checkLocalCache = () => {
-    let weatherData = window.localStorage.getItem('srWeather');
-
-    if (!weatherData) return;
+    let weatherData = window.localStorage.getItem('srWeather')
+    this.validateWeatherObject(weatherData)
+    if (!weatherData) return
 
     if (weatherData) {
-      this.setState({ localCacheFound: true });
-      return;
+      this.setState({ localCacheFound: true })
+      return
     }
-  };
+  }
 
   setWeatherData = () => {
-    const srWeather = JSON.parse(window.localStorage.getItem('srWeather'));
-    this.setState({ srWeather, localCacheFound: false });
-  };
+    const srWeather = JSON.parse(window.localStorage.getItem('srWeather'))
+    this.setState({ srWeather, localCacheFound: false })
+  }
 
-  removeWeatherDataByLocation = (location) => {
-    let weatherData = { ...this.state.srWeather };
-    let { locations } = weatherData;
+  removeWeatherDataByLocation = location => {
+    let weatherData = { ...this.state.srWeather }
+    let { locations } = weatherData
 
-    let newLocations = locations.filter((loc) => loc.id !== location.id);
+    let newLocations = locations.filter(loc => loc.id !== location.id)
 
     weatherData = {
       locations: newLocations,
       lastUpdated: weatherData.lastUpdated,
-    };
+    }
 
-    this.setState({ srWeather: weatherData });
-    this.saveWeatherObjectOnLocal(weatherData);
-  };
+    this.setState({ srWeather: weatherData })
+    this.saveWeatherObjectOnLocal(weatherData)
 
-  saveWeatherObjectOnLocal = (weatherData) => {
-    const freshWeatherData = JSON.stringify(weatherData);
-    window.localStorage.removeItem('srWeather');
-    window.localStorage.setItem('srWeather', freshWeatherData);
-  };
+    if (!newLocations.length) this.clearLocalCache()
+  }
+
+  saveWeatherObjectOnLocal = weatherData => {
+    const freshWeatherData = JSON.stringify(weatherData)
+    window.localStorage.removeItem('srWeather')
+    window.localStorage.setItem('srWeather', freshWeatherData)
+  }
 
   clearLocalCache = () => {
-    window.localStorage.removeItem('srWeather');
-    this.setState({ localCacheFound: false });
-  };
+    window.localStorage.removeItem('srWeather')
+    this.setState({ localCacheFound: false })
+  }
 
-  validateWeatherObject = (weatherData) => {};
+  validateWeatherObject = weatherData => {
+    const weatherObj = JSON.parse(weatherData)
+  }
 }
 
-export default Storage;
+export default Storage
