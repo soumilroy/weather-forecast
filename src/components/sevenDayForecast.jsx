@@ -26,7 +26,7 @@ const options = {
   },
 };
 
-const TodayForecast = () => {
+const SevenDayForecast = () => {
   return (
     <>
       <Line data={data} options={options} />
@@ -34,4 +34,4 @@ const TodayForecast = () => {
   );
 };
 
-export default TodayForecast;
+export default SevenDayForecast;
