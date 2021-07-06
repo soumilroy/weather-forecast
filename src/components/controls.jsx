@@ -1,7 +1,8 @@
 import React from 'react'
 
 const Controls = props => {
-  if (!props.isLocalCache) return null
+  console.log(`localcache:`, props.localCacheFound)
+  if (!props.localCacheFound) return null
 
   return (
     <div className='bg-gray-700'>

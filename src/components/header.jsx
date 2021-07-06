@@ -35,7 +35,7 @@ const Header = props => {
             <button
               type='button'
               onClick={props.setPopupStatus}
-              className='bg-gradient-to-br to-purple-700 from-purple-500 text-purple-50 px-6 py-2.5 focus:ring-2 ring-purple-400 rounded-full text-sm font-medium shadow hover:opacity-90 transition duration-150 ease-linear'
+              className='bg-gradient-to-br to-purple-700 from-purple-400 text-purple-50 px-6 py-2.5 focus:ring-2 ring-purple-400 rounded-md text-sm font-medium shadow hover:opacity-90 transition duration-150 ease-linear'
             >
               Add Location
             </button>
