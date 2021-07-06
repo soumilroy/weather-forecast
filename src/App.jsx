@@ -5,6 +5,7 @@ import WeatherData from './components/weatherData'
 import Popup from './components/popup'
 import Form from './components/form'
 import EmptyMessage from './components/emptyMessage'
+import { WeatherContext } from './context/weatherContext'
 // env read import.meta.env.SNOWPACK_PUBLIC_API_URL
 // const {SNOWPACK_PUBLIC_API_URL} = import.meta.env;
 // fetch(`${SNOWPACK_PUBLIC_API_URL}/users`).then(...)
@@ -66,7 +67,6 @@ import EmptyMessage from './components/emptyMessage'
 //       lastFetched: new Date().toUTCString(),
 //     },
 //   ],
-//   lastUpdated: new Date().toUTCString(),
 // }
 
 // window.localStorage.setItem('srWeather', JSON.stringify(srWeather))
@@ -74,7 +74,7 @@ import EmptyMessage from './components/emptyMessage'
 const App = () => {
   let [openPopup, setOpenPopup] = useState(false)
   let [localCacheFound, setLocalCacheFound] = useState(false)
-  const [weather, setWeather] = useState({})
+  const [weather, setWeather] = useState({ locations: [] })
 
   const checkLocalCache = () => {
     let weatherData = window.localStorage.getItem('srWeather')
@@ -87,7 +87,13 @@ const App = () => {
     }
   }
 
-  const setWeatherData = () => {
+  const setWeatherObject = locationData => {
+    const weatherClone = { ...weather }
+    weatherClone.locations.push(locationData)
+    setWeather(weatherClone)
+  }
+
+  const setWeatherDataFromCache = () => {
     const srWeather = JSON.parse(window.localStorage.getItem('srWeather'))
     setWeather(srWeather)
     setLocalCacheFound(false)
@@ -118,7 +124,7 @@ const App = () => {
 
   const clearLocalCache = () => {
     window.localStorage.removeItem('srWeather')
-    setWeather({})
+    setWeather({ locations: [] })
     setLocalCacheFound(false)
   }
 
@@ -130,33 +136,35 @@ const App = () => {
     checkLocalCache()
   }, [])
 
-  let weatherDataAvailable = false
-  if (Object.keys(weather).length) weatherDataAvailable = true
-  else weatherDataAvailable = false
-
   return (
-    <div className='relative min-h-screen App bg-gradient-to-t from-gray-900 via-gray-700 to-gray-800'>
-      <Header setPopupStatus={setPopupStatus} />
-      <Controls
-        localCacheFound={localCacheFound}
-        setWeatherData={setWeatherData}
-        clearLocalCache={clearLocalCache}
-      />
-      <div className='max-w-6xl px-4 py-4 mx-auto'>
-        {weatherDataAvailable &&
-          weather.locations.map(location => (
-            <WeatherData
-              key={location.id}
-              location={location}
-              removeLocation={removeWeatherDataByLocation}
-            />
-          ))}
+    <WeatherContext.Provider
+      value={{
+        localCacheFound,
+        setWeatherObject,
+        setWeatherDataFromCache,
+        clearLocalCache,
+        setPopupStatus,
+      }}
+    >
+      <div className='relative min-h-screen App bg-gradient-to-t from-gray-900 via-gray-700 to-gray-800'>
+        <Header />
+        <Controls localCacheFound={localCacheFound} />
+        <div className='max-w-6xl px-4 py-4 mx-auto'>
+          {weather &&
+            weather.locations.map(location => (
+              <WeatherData
+                key={location.id}
+                location={location}
+                removeLocation={removeWeatherDataByLocation}
+              />
+            ))}
+        </div>
+        <Popup open={openPopup} setPopupStatus={setPopupStatus}>
+          <Form setPopupStatus={setPopupStatus} />
+        </Popup>
+        {weather.locations.length === 0 && <EmptyMessage />}
       </div>
-      <Popup open={openPopup} setPopupStatus={setPopupStatus}>
-        <Form setPopupStatus={setPopupStatus} />
-      </Popup>
-      {!weatherDataAvailable && <EmptyMessage />}
-    </div>
+    </WeatherContext.Provider>
   )
 }
 

@@ -1,6 +1,32 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useContext } from 'react'
+import { WeatherContext } from '../context/weatherContext'
 
-const Form = props => {
+function transformCurrentWeather (data) {
+  const obj = {
+    id: '1234-789055',
+    locationLabel: 'Baka Baka',
+    longitude: '45',
+    latitude: '33',
+    temperatureInCelcius: '32',
+    windsInKmph: '45',
+    humidity: '78',
+    currentForecast: [
+      { id: 123, someVal: 123 },
+      { id: 456, someVal: 456 },
+    ],
+    sevenDayForecast: [
+      { id: 789, someVal: 789 },
+      { id: 987, someVal: 987 },
+    ],
+    lastFetched: new Date().toUTCString(),
+  }
+
+  console.log(`transformed `, obj)
+  return obj
+}
+
+const Form = () => {
+  const { setWeatherObject, setPopupStatus } = useContext(WeatherContext)
   const [searchLocation, setSearchLocation] = useState('')
   const [error, setError] = useState(null)
 
@@ -10,8 +36,11 @@ const Form = props => {
       `https://api.openweathermap.org/data/2.5/weather?q=${searchLocation.trim()}&units=metric&appid=f2ea0ed9ea8fa5922812c1debb3a0bdd`,
     )
       .then(res => res.json())
-      .then(data => {})
-      .then(() => props.setPopupStatus({ openPopup: false }))
+      .then(data => {
+        return transformCurrentWeather(data)
+      })
+      .then(data => setWeatherObject(data))
+      .then(() => setPopupStatus({ openPopup: false }))
   }
 
   return (
@@ -30,7 +59,7 @@ const Form = props => {
         />
         <button
           type='submit'
-          className='mt-4 w-full bg-gradient-to-br to-purple-700 from-purple-500 text-purple-50 px-6 py-2.5 focus:ring-2 ring-purple-400 rounded-md text-sm font-medium shadow hover:opacity-90 transition duration-150 ease-linear'
+          className='mt-4 w-full bg-gradient-to-b to-purple-800 from-purple-500 text-purple-50 px-6 py-2.5 focus:ring-2 ring-purple-400 rounded-md text-sm font-medium shadow hover:opacity-90 transition duration-150 ease-linear'
         >
           Get Weather Details
         </button>
