@@ -59,7 +59,7 @@ const WeatherData = (props) => {
             <div className="w-32">
               <span className="text-sm text-gray-600">
                 <FontAwesomeIcon icon={faSun} className="mr-2" />
-                {temperatureInCelcius} °C
+                {temperatureInCelcius}°C
               </span>
             </div>
             <div className="w-32">
@@ -96,6 +96,34 @@ const WeatherData = (props) => {
       <div className={dropDownClasses}>
         <div className="other-info px-4 py-3">
           <div className="flex flex-wrap items-center -mx-4">
+            {minTemperatureInCelcius && (
+              <div className="w-1/5 px-4 py-2">
+                <div className="card px-4 py-2.5 border rounded-md text-gray-700 font-bold">
+                  <span className="block text-sm text-gray-500 font-normal">
+                    Minimum Temperature
+                  </span>
+                  {minTemperatureInCelcius}°C
+                </div>
+              </div>
+            )}
+            {maxTemperatureInCelcius && (
+              <div className="w-1/5 px-4 py-2">
+                <div className="card px-4 py-2.5 border rounded-md text-gray-700 font-bold">
+                  <span className="block text-sm text-gray-500 font-normal">
+                    Maximum Temperature
+                  </span>
+                  {maxTemperatureInCelcius}°C
+                </div>
+              </div>
+            )}
+            <div className="w-1/5 px-4 py-2">
+              <div className="card px-4 py-2.5 border rounded-md text-gray-700 font-bold">
+                <span className="block text-sm text-gray-500 font-normal">
+                  Feels like
+                </span>
+                {feelsLike}°C
+              </div>
+            </div>
             <div className="w-1/5 px-4 py-2">
               <div className="card px-4 py-2.5 border rounded-md text-gray-700 font-bold">
                 <span className="block text-sm text-gray-500 font-normal">
@@ -112,34 +140,9 @@ const WeatherData = (props) => {
                 {longitude}
               </div>
             </div>
-            <div className="w-1/5 px-4 py-2">
-              <div className="card px-4 py-2.5 border rounded-md text-gray-700 font-bold">
-                <span className="block text-sm text-gray-500 font-normal">
-                  Minimum Temperature
-                </span>
-                {minTemperatureInCelcius}
-              </div>
-            </div>
-            <div className="w-1/5 px-4 py-2">
-              <div className="card px-4 py-2.5 border rounded-md text-gray-700 font-bold">
-                <span className="block text-sm text-gray-500 font-normal">
-                  Maximum Temperature
-                </span>
-                {maxTemperatureInCelcius}
-              </div>
-            </div>
-            <div className="w-1/5 px-4 py-2">
-              <div className="card px-4 py-2.5 border rounded-md text-gray-700 font-bold">
-                <span className="block text-sm text-gray-500 font-normal">
-                  Feels like
-                </span>
-                {feelsLike}
-              </div>
-            </div>
           </div>
         </div>
-
-        <div className="px-4 py-4 flex flex-wrap items-center -mx-4">
+        <div className="px-4 pb-4 flex flex-wrap items-center -mx-4">
           <div className="today w-1/2 px-4">
             <TodayForecast />
           </div>

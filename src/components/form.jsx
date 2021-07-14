@@ -2,6 +2,23 @@ import React, { useState, useContext } from 'react';
 import { WeatherContext } from '../context/weatherContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkedAlt, faSpinner } from '@fortawesome/free-solid-svg-icons';
+
+function transformWeatherByCoord({ lat, lon, current, hourly, daily }) {
+  return {
+    id: current.dt,
+    name: 'My Location',
+    latitude: lat,
+    longitude: lon,
+    temperatureInCelcius: current.temp,
+    feelsLike: current.feels_like,
+    humidity: current.humidity,
+    weatherMain: current.weather[0].main,
+    weatherDescription: current.weather[0].description,
+    windSpeed: current.wind_speed,
+    lastFetched: current.dt,
+  };
+}
+
 function transformCurrentWeather({ id, name, coord, weather, main, wind, dt }) {
   return {
     id,
@@ -26,6 +43,25 @@ const Form = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const checkWeatherForCurrentLoc = () => {
+    setLoading(true);
+
+    fetch(
+      `https://api.openweathermap.org/data/2.5/onecall?lat=22.5697&lon=88.3697&exclude=minutely,daily,alerts&units=metric&appid=f2ea0ed9ea8fa5922812c1debb3a0bdd`,
+    )
+      .then((res) => res.json())
+      .then((data) => transformWeatherByCoord(data))
+      .then((data) => {
+        setWeatherObject(data);
+        setLoading(false);
+      })
+      .then(() => setPopupStatus({ openPopup: false }))
+      .catch(() => {
+        setError(`This location doesn't exist`);
+        setLoading(false);
+      });
+  };
+
   const searchWeatherByCity = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -47,7 +83,7 @@ const Form = () => {
 
   if (loading) {
     return (
-      <div className="text-center py-4 px-4 rounded-md bg-green-100 text-green-700 font-medium text-sm">
+      <div className="text-center py-4 px-4 rounded-md bg-green-100 text-green-700 font-medium text-lg">
         <span className="inline-flex items-center">
           Fetching weather
           <FontAwesomeIcon
@@ -94,6 +130,7 @@ const Form = () => {
         <button
           type="submit"
           className="w-full bg-gradient-to-br to-pink-700 from-pink-500 text-pink-50 px-6 py-2.5 focus:ring-2 ring-pink-400 rounded-md text-sm font-medium shadow hover:opacity-90 transition duration-150 ease-linear"
+          onClick={checkWeatherForCurrentLoc}
         >
           <FontAwesomeIcon icon={faMapMarkedAlt} className="mr-2" />
           Use my location
