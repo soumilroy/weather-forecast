@@ -29,6 +29,7 @@ const options = {
 const TodayForecast = () => {
   return (
     <>
+      <h3 className="font-bold text-gray-700">Today's Forecast</h3>
       <Line data={data} options={options} />
     </>
   );

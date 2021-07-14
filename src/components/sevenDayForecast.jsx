@@ -29,6 +29,7 @@ const options = {
 const SevenDayForecast = () => {
   return (
     <>
+      <h3 className="font-bold text-gray-700">Seven Day Forecast</h3>
       <Line data={data} options={options} />
     </>
   );

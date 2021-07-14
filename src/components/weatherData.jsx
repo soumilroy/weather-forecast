@@ -1,40 +1,30 @@
 import React, { useState } from 'react';
-// import TodayForecast from './todayForecast'
-// import SevenDayForecast from './sevenDayForecast'
-
-// id,
-// name,
-// latitude: coord.lat,
-// longitude: coord.lon,
-// temperatureInCelcius: main.temp,
-// minTemperatureInCelcius: main.temp_min,
-// maxTemperatureInCelcius: main.temp_max,
-// feelsLike: main.feels_like,
-// humidity: main.humidity,
-// weatherMain: weather.main,
-// weatherDescription: weather.description,
-// windSpeed: wind.speed,
-// windDirection: wind.deg,
-// windGust: wind.gust,
-// lastFetched: dt,
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faChevronRight,
+  faTemperatureLow,
+  faWind,
+  faSun,
+} from '@fortawesome/free-solid-svg-icons';
+import moment from 'moment';
+import TodayForecast from './todayForecast';
+import SevenDayForecast from './sevenDayForecast';
 
 const WeatherData = (props) => {
   const [open, setOpen] = useState(false);
 
   const {
-    id,
     name,
     latitude,
     longitude,
     temperatureInCelcius,
+    humidity,
     minTemperatureInCelcius,
     maxTemperatureInCelcius,
     feelsLike,
-    humidity,
     weatherMain,
     weatherDescription,
     windSpeed,
-    windDirection,
     lastFetched,
   } = props.location;
 
@@ -42,62 +32,58 @@ const WeatherData = (props) => {
   dropDownClasses = open ? dropDownClasses : `${dropDownClasses} h-0`;
   return (
     <div className="my-6 overflow-hidden rounded-lg shadow-lg weather-data">
-      <header className="bg-gradient-to-b to-gray-600 from-gray-500">
+      <header
+        className="bg-gradient-to-t to-gray-100 from-gray-200 cursor-pointer"
+        onClick={() => setOpen(!open)}
+      >
         <div className="flex items-center justify-between">
-          <div className="flex justify-between w-7/12 px-4 py-4">
+          <div className="flex items-center justify-between leading-tight w-7/12 px-4 py-2">
             <div className="w-8">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
+              <FontAwesomeIcon
+                icon={faChevronRight}
                 className={
                   open
-                    ? 'h-6 w-6 text-gray-50 transform'
-                    : 'h-6 w-6 text-gray-50 transform -rotate-90'
+                    ? 'h-6 w-6 text-gray-700 transform rotate-90'
+                    : 'h-6 w-6 text-gray-700 transform'
                 }
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
+              />
             </div>
             <div className="w-64">
-              <h2
-                className="text-lg font-bold text-gray-100 cursor-pointer"
-                onClick={() => setOpen(!open)}
-              >
+              <h2 className="text-base font-bold text-gray-700 cursor-pointer">
                 {name}
               </h2>
+              <span className="text-sm text-gray-600">
+                {weatherDescription}
+              </span>
             </div>
-            <div className="w-24">
-              <span className="text-base font-medium text-gray-200">
+            <div className="w-32">
+              <span className="text-sm text-gray-600">
+                <FontAwesomeIcon icon={faSun} className="mr-2" />
                 {temperatureInCelcius} °C
               </span>
             </div>
-            <div className="w-24">
-              <span className="text-base font-medium text-gray-200">
-                {windSpeed}
+            <div className="w-32">
+              <span className="text-sm text-gray-600">
+                <FontAwesomeIcon icon={faWind} className="mr-2" />
+                {windSpeed} m/s
               </span>
             </div>
-            <div className="w-24">
-              <span className="text-base font-medium text-gray-200">
-                {humidity}
+            <div className="w-32">
+              <span className="text-sm text-gray-600">
+                <FontAwesomeIcon icon={faTemperatureLow} className="mr-2" />
+                {humidity}%
               </span>
             </div>
           </div>
           <div className="w-5/12 px-4 font-normal text-right">
             <div className="flex flex-col">
-              <span className="block text-xs font-normal leading-loose text-gray-300">
-                Generated on {new Date(lastFetched).toLocaleDateString()}
+              <span className="block text-xs font-normal leading-loose text-gray-600">
+                Fetched {moment.unix(lastFetched).fromNow()}
               </span>
               <div className="flex justify-end">
                 <button
                   onClick={() => props.removeLocation(props.location)}
-                  className="inline-block ml-4 text-xs text-yellow-200 hover:text-red-300"
+                  className="inline-block ml-4 text-xs text-yellow-600 hover:text-red-300"
                 >
                   Remove
                 </button>
@@ -108,12 +94,57 @@ const WeatherData = (props) => {
       </header>
 
       <div className={dropDownClasses}>
-        <div className="flex flex-wrap">
-          <div className="w-1/2 px-4 py-4">
-            <div className="">{/* <TodayForecast /> */}</div>
+        <div className="other-info px-4 py-3">
+          <div className="flex flex-wrap items-center -mx-4">
+            <div className="w-1/5 px-4 py-2">
+              <div className="card px-4 py-2.5 border rounded-md text-gray-700 font-bold">
+                <span className="block text-sm text-gray-500 font-normal">
+                  Latitude
+                </span>
+                {latitude}
+              </div>
+            </div>
+            <div className="w-1/5 px-4 py-2">
+              <div className="card px-4 py-2.5 border rounded-md text-gray-700 font-bold">
+                <span className="block text-sm text-gray-500 font-normal">
+                  Longitude
+                </span>
+                {longitude}
+              </div>
+            </div>
+            <div className="w-1/5 px-4 py-2">
+              <div className="card px-4 py-2.5 border rounded-md text-gray-700 font-bold">
+                <span className="block text-sm text-gray-500 font-normal">
+                  Minimum Temperature
+                </span>
+                {minTemperatureInCelcius}
+              </div>
+            </div>
+            <div className="w-1/5 px-4 py-2">
+              <div className="card px-4 py-2.5 border rounded-md text-gray-700 font-bold">
+                <span className="block text-sm text-gray-500 font-normal">
+                  Maximum Temperature
+                </span>
+                {maxTemperatureInCelcius}
+              </div>
+            </div>
+            <div className="w-1/5 px-4 py-2">
+              <div className="card px-4 py-2.5 border rounded-md text-gray-700 font-bold">
+                <span className="block text-sm text-gray-500 font-normal">
+                  Feels like
+                </span>
+                {feelsLike}
+              </div>
+            </div>
           </div>
-          <div className="w-1/2 px-4 py-4">
-            <div className="">{/* <SevenDayForecast /> */}</div>
+        </div>
+
+        <div className="px-4 py-4 flex flex-wrap items-center -mx-4">
+          <div className="today w-1/2 px-4">
+            <TodayForecast />
+          </div>
+          <div className="seven-day w-1/2 px-4">
+            <SevenDayForecast />
           </div>
         </div>
       </div>

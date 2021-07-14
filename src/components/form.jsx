@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { WeatherContext } from '../context/weatherContext';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMapMarkedAlt, faSpinner } from '@fortawesome/free-solid-svg-icons';
 function transformCurrentWeather({ id, name, coord, weather, main, wind, dt }) {
   return {
     id,
@@ -15,7 +16,6 @@ function transformCurrentWeather({ id, name, coord, weather, main, wind, dt }) {
     weatherMain: weather[0].main,
     weatherDescription: weather[0].description,
     windSpeed: wind.speed,
-    windDirection: wind.deg,
     lastFetched: dt,
   };
 }
@@ -23,20 +23,43 @@ function transformCurrentWeather({ id, name, coord, weather, main, wind, dt }) {
 const Form = () => {
   const { setWeatherObject, setPopupStatus } = useContext(WeatherContext);
   const [searchLocation, setSearchLocation] = useState('');
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const searchWeatherByCity = (e) => {
     e.preventDefault();
+    setLoading(true);
     fetch(
       `https://api.openweathermap.org/data/2.5/weather?q=${searchLocation.trim()}&units=metric&appid=f2ea0ed9ea8fa5922812c1debb3a0bdd`,
     )
       .then((res) => res.json())
+      .then((data) => transformCurrentWeather(data))
       .then((data) => {
-        return transformCurrentWeather(data);
+        setWeatherObject(data);
+        setLoading(false);
       })
-      .then((data) => setWeatherObject(data))
-      .then(() => setPopupStatus({ openPopup: false }));
+      .then(() => setPopupStatus({ openPopup: false }))
+      .catch(() => {
+        setError(`This location doesn't exist`);
+        setLoading(false);
+      });
   };
+
+  if (loading) {
+    return (
+      <div className="text-center py-4 px-4 rounded-md bg-green-100 text-green-700 font-medium text-sm">
+        <span className="inline-flex items-center">
+          Fetching weather
+          <FontAwesomeIcon
+            icon={faSpinner}
+            size="lg"
+            spin
+            className="text-green-700 ml-2"
+          />
+        </span>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -51,38 +74,31 @@ const Form = () => {
           onChange={(e) => setSearchLocation(e.target.value)}
           className="w-full block py-2.5 px-4 border border-gray-300 rounded-md focus:ring ring-purple-300 focus:border-purple-400 outline-none transition duration-150 ease-in text-sm"
           placeholder="e.g London"
+          required
         />
+        {error ? (
+          <span className="text-xs text-red-500 mt-2">{error}</span>
+        ) : (
+          ''
+        )}
         <button
           type="submit"
           className="mt-4 w-full bg-gradient-to-b to-purple-800 from-purple-500 text-purple-50 px-6 py-2.5 focus:ring-2 ring-purple-400 rounded-md text-sm font-medium shadow hover:opacity-90 transition duration-150 ease-linear"
         >
           Get Weather Details
         </button>
-      </form>
-      <div className="my-2 text-center">
-        <span className="inline-block text-sm">Or</span>
-      </div>
-      <button
-        type="submit"
-        className="w-full bg-gradient-to-br to-pink-700 from-pink-500 text-pink-50 px-6 py-2.5 focus:ring-2 ring-pink-400 rounded-md text-sm font-medium shadow hover:opacity-90 transition duration-150 ease-linear"
-      >
-        <svg
-          aria-hidden="true"
-          focusable="false"
-          data-prefix="fas"
-          data-icon="map-marker-alt"
-          className="inline-block w-4 h-4 mr-2 fill-current"
-          role="img"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 384 512"
+
+        <div className="my-2 text-center">
+          <span className="inline-block text-sm">Or</span>
+        </div>
+        <button
+          type="submit"
+          className="w-full bg-gradient-to-br to-pink-700 from-pink-500 text-pink-50 px-6 py-2.5 focus:ring-2 ring-pink-400 rounded-md text-sm font-medium shadow hover:opacity-90 transition duration-150 ease-linear"
         >
-          <path
-            fill="currentColor"
-            d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"
-          ></path>
-        </svg>
-        Use my location
-      </button>
+          <FontAwesomeIcon icon={faMapMarkedAlt} className="mr-2" />
+          Use my location
+        </button>
+      </form>
     </>
   );
 };
