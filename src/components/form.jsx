@@ -16,6 +16,8 @@ function transformWeatherByCoord({ lat, lon, current, hourly, daily }) {
     weatherDescription: current.weather[0].description,
     windSpeed: current.wind_speed,
     lastFetched: current.dt,
+    hourly,
+    daily,
   };
 }
 

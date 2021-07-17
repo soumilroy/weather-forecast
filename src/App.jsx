@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Header from './components/header';
-import Controls from './components/controls';
 import Popup from './components/popup';
 import Form from './components/form';
 import EmptyMessage from './components/emptyMessage';
@@ -30,7 +29,6 @@ const App = () => {
     const weatherClone = { ...weather };
     weatherClone.locations.unshift(locationData);
     setWeather(weatherClone);
-    saveWeatherObjectOnLocal(weatherClone);
   };
 
   const setWeatherDataFromCache = () => {
@@ -51,30 +49,10 @@ const App = () => {
     };
 
     setWeather(weatherData);
-    saveWeatherObjectOnLocal(weatherData);
-
-    if (!newLocations.length) clearLocalCache();
   };
-
-  const saveWeatherObjectOnLocal = (weatherData) => {
-    const freshWeatherData = JSON.stringify(weatherData);
-    window.localStorage.removeItem('srWeather');
-    window.localStorage.setItem('srWeather', freshWeatherData);
-  };
-
-  const clearLocalCache = () => {
-    window.localStorage.removeItem('srWeather');
-    setWeather({ locations: [] });
-    setLocalCacheFound(false);
-  };
-
   const setPopupStatus = () => {
     setOpenPopup(!openPopup);
   };
-
-  useEffect(() => {
-    checkLocalCache();
-  }, []);
 
   return (
     <WeatherContext.Provider
@@ -82,13 +60,11 @@ const App = () => {
         localCacheFound,
         setWeatherObject,
         setWeatherDataFromCache,
-        clearLocalCache,
         setPopupStatus,
       }}
     >
       <div className="relative min-h-screen App bg-gradient-to-t from-gray-900 via-gray-700 to-gray-800">
         <Header />
-        <Controls localCacheFound={localCacheFound} />
         <WeatherLocations
           weather={weather}
           removeWeatherDataByLocation={removeWeatherDataByLocation}

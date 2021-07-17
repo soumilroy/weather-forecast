@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import moment from 'moment';
+import TodayForecast from './todayForecast';
+import SevenDayForecast from './sevenDayForecast';
 import {
   faChevronRight,
   faTemperatureLow,
   faWind,
   faSun,
 } from '@fortawesome/free-solid-svg-icons';
-import moment from 'moment';
-import TodayForecast from './todayForecast';
-import SevenDayForecast from './sevenDayForecast';
 
 const WeatherData = (props) => {
   const [open, setOpen] = useState(false);
