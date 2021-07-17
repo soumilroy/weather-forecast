@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Header from './components/header'
 import Popup from './components/popup'
 import Form from './components/form'
@@ -8,30 +8,12 @@ import WeatherLocations from './components/weatherLocations'
 
 const App = () => {
   let [openPopup, setOpenPopup] = useState(false)
-  let [localCacheFound, setLocalCacheFound] = useState(false)
   const [weather, setWeather] = useState({ locations: [] })
-
-  const checkLocalCache = () => {
-    let weatherData = window.localStorage.getItem('srWeather')
-
-    if (!weatherData) return
-
-    if (weatherData) {
-      setLocalCacheFound(true)
-      return
-    }
-  }
 
   const setWeatherObject = locationData => {
     const weatherClone = { ...weather }
     weatherClone.locations.unshift(locationData)
     setWeather(weatherClone)
-  }
-
-  const setWeatherDataFromCache = () => {
-    const srWeather = JSON.parse(window.localStorage.getItem('srWeather'))
-    setWeather(srWeather)
-    setLocalCacheFound(false)
   }
 
   const removeWeatherDataByLocation = location => {
@@ -54,9 +36,7 @@ const App = () => {
   return (
     <WeatherContext.Provider
       value={{
-        localCacheFound,
         setWeatherObject,
-        setWeatherDataFromCache,
         setPopupStatus,
       }}
     >
