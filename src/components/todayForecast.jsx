@@ -1,38 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { Line } from 'react-chartjs-2';
+import React from 'react'
+import { Line } from 'react-chartjs-2'
+import moment from 'moment'
 
-const data = {
-  labels: ['1', '2', '3', '4', '5', '6'],
-  datasets: [
-    {
-      label: '# of Votes',
-      data: [12, 19, 3, 5, 2, 3],
-      fill: false,
-      backgroundColor: 'rgb(255, 99, 132)',
-      borderColor: 'rgba(255, 99, 132, 0.2)',
-    },
-  ],
-};
-
-const options = {
-  scales: {
-    yAxes: [
+const TodayForecast = ({ hourlyData }) => {
+  const timeLabels = hourlyData.map(each =>
+    moment.unix(each.dt).format('h:mm a'),
+  )
+  const dataSet = hourlyData.map(each => each.temp)
+  const data = {
+    labels: timeLabels,
+    datasets: [
       {
-        ticks: {
-          beginAtZero: true,
-        },
+        label: 'Temperature in Celcius',
+        data: dataSet,
+        fill: false,
+        backgroundColor: 'rgb(100,45,195, .4)',
+        borderColor: 'rgb(100,45,195)',
       },
     ],
-  },
-};
+  }
 
-const TodayForecast = () => {
+  const options = {
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: true,
+          },
+        },
+      ],
+    },
+  }
   return (
     <>
-      <h3 className="font-bold text-gray-700">Today's Forecast</h3>
+      <h3 className='font-bold text-gray-700'>Today's Forecast</h3>
       <Line data={data} options={options} />
     </>
-  );
-};
+  )
+}
 
-export default TodayForecast;
+export default TodayForecast

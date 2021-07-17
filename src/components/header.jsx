@@ -7,7 +7,7 @@ const Header = () => {
     <WeatherContext.Consumer>
       {({ setPopupStatus }) => (
         <header className='bg-gray-800 border-b border-gray-700 App-header'>
-          <div className='max-w-6xl mx-auto'>
+          <div className='max-w-7xl mx-auto'>
             <div className='flex items-center justify-between'>
               <div className='flex items-center px-4 py-3'>
                 <div className='-ml-4 logo'>

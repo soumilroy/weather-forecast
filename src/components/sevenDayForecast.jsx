@@ -1,38 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { Line } from 'react-chartjs-2';
+import React from 'react'
+import { Line } from 'react-chartjs-2'
+import moment from 'moment'
 
-const data = {
-  labels: ['1', '2', '3', '4', '5', '6'],
-  datasets: [
-    {
-      label: '# of Votes',
-      data: [12, 19, 3, 5, 2, 3],
-      fill: false,
-      backgroundColor: 'rgb(255, 99, 132)',
-      borderColor: 'rgba(255, 99, 132, 0.2)',
-    },
-  ],
-};
+const SevenDayForecast = ({ dailyData }) => {
+  const timeLabels = dailyData.map(each => moment.unix(each.dt).format('ddd'))
+  const dataSet = dailyData.map(each => each.temp.day)
 
-const options = {
-  scales: {
-    yAxes: [
+  const data = {
+    labels: timeLabels,
+    datasets: [
       {
-        ticks: {
-          beginAtZero: true,
-        },
+        label: 'Temperature in Celcius',
+        data: dataSet,
+        fill: false,
+        backgroundColor: 'rgba(202,37,109, .4)',
+        borderColor: 'rgba(202,37,109, .8)',
       },
     ],
-  },
-};
+  }
 
-const SevenDayForecast = () => {
+  const options = {
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: true,
+          },
+        },
+      ],
+    },
+  }
+
   return (
     <>
-      <h3 className="font-bold text-gray-700">Seven Day Forecast</h3>
+      <h3 className='font-bold text-gray-700'>Seven Day Forecast</h3>
       <Line data={data} options={options} />
     </>
-  );
-};
+  )
+}
 
-export default SevenDayForecast;
+export default SevenDayForecast
